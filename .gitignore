@@ -3,4 +3,5 @@
 .vscode
 nuitka-crash-report.xml
 log.txt
+dist/*
 __pycache__

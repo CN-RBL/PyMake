@@ -61,5 +61,3 @@ def t(x: str) -> str:
 if __name__ == "__main__":
     raise RuntimeError("Try Running The Module File 尝试运行模块文件 嘗試運行模組檔 \
 モジュールファイルを実行してみてください")
-    print(get_system_language())
-    print(get_app_language_list())

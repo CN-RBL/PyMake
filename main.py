@@ -90,7 +90,7 @@ def validate_and_process_args(config: dict) -> list[str]:
                 processed_args.append(arg)
 
     if not jobs_set:
-        run_cpu_count = cpu_count() * 2
+        run_cpu_count: int = cpu_count() * 2
         processed_args.append(f"--jobs={run_cpu_count}")
         logger.info(_("9"), run_cpu_count)
 
@@ -99,10 +99,8 @@ def validate_and_process_args(config: dict) -> list[str]:
 
 def run_nuitka(config: dict) -> int | None:
     try:
-
         nuitka_args = validate_and_process_args(config)
-
-        cmd = [sys.executable, "-m", "nuitka"] + nuitka_args
+        cmd: list = [sys.executable, "-m", "nuitka"] + nuitka_args
 
         logger.info(_("10"))
         logger.debug(_("11"), " ".join(cmd))
@@ -151,7 +149,7 @@ def is_compiled() -> bool:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(
+    parser: argparse.ArgumentParser = argparse.ArgumentParser(
         prog="PyMake",
         description=f"PyMake v{VERSION} by {AUTHOR}{'' if is_compiled() else ' (DEBUG)'}",
         usage="pymake.exe [选项]" if is_compiled() else "pymake.py [选项]",
@@ -192,7 +190,7 @@ def main() -> int:
         help="设置工具语言"
     )
 
-    args = parser.parse_args()
+    args: argparse.Namespace = parser.parse_args()
 
     if args.verbose:
         logger.setLevel(logging.DEBUG)

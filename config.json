@@ -1,6 +1,5 @@
 {
     "nuitka_args": [
-        "--onefile",
         "--remove-output",
         "--disable-plugin=tk-inter",
         "--enable-plugin=no-qt",
@@ -10,12 +9,12 @@
         "--show-memory",
         "--show-modules",
         "--lto=yes",
-        "--assume-yes-for-downloads",
         "--mingw64",
         "--output-dir=dist",
         "--jobs=$auto",
         "--verbose",
         "--show-scons",
-        "main.py"
+        "--module",
+        "lang.py"
     ]
 }
