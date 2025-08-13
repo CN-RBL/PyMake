@@ -2,7 +2,9 @@ import argparse
 import logging
 import platform
 import subprocess
+import os
 import sys
+import json
 from functools import lru_cache
 from multiprocessing import cpu_count
 from pathlib import Path
@@ -16,11 +18,11 @@ _ = t
 logging.basicConfig(
     level=logging.INFO,
     format="[%(asctime)s] [%(levelname)s] %(message)s (%(filename)s.%(funcName)s %(lineno)d)",
-    datefmt=t("time")
+    datefmt=_("time")
 )
 logger: logging.Logger = logging.getLogger("PyMake")
 
-VERSION: str = "1.1.3"
+VERSION: str = "1.1.5"
 AUTHOR: str = "RED.BLUE.LIGHT 红蓝灯"
 DEFAULT_CONFIG_PATH: Path = Path("config.json")
 
@@ -125,17 +127,17 @@ def run_nuitka(config: dict) -> int | None:
         duration: float = perf_counter() - start_time
 
         if return_code == 0:
-            logger.info("编译成功完成! 耗时: %.2f秒", duration)
+            logger.info(_("12"), duration)
             return 0
         else:
-            logger.error("编译失败! 退出码: %d, 耗时: %.2f秒", return_code, duration)
+            logger.error(_("13"), return_code, duration)
             sys.exit(1)
 
     except FileNotFoundError:
-        logger.error("未找到Nuitka, 请先通过一下命令安装: \n\tpip install nuitka")
+        logger.error(_("14"))
         sys.exit(1)
     except Exception as e:
-        logger.exception("编译过程中发生意外错误: %s", e)
+        logger.exception(_("15"), e)
         sys.exit(1)
 
 
@@ -152,9 +154,9 @@ def main() -> int:
     parser: argparse.ArgumentParser = argparse.ArgumentParser(
         prog="PyMake",
         description=f"PyMake v{VERSION} by {AUTHOR}{'' if is_compiled() else ' (DEBUG)'}",
-        usage="pymake.exe [选项]" if is_compiled() else "pymake.py [选项]",
+        usage=f"pymake.exe [{_("options")}]" if is_compiled() else f"pymake.py [{_("options")}]",
         formatter_class=argparse.RawTextHelpFormatter,
-        epilog="若要了解更多信息，请查看help.md"
+        epilog=_("16")
     )
 
     parser.add_argument(
@@ -167,7 +169,7 @@ def main() -> int:
     parser.add_argument(
         "--load-config",
         metavar="JSON文件",
-        help="从JSON文件加载配置\n示例: --load-config build.json\n本程序内置配置可前往程序所在目录的help.html查看"
+        help=_("--load-config-help")
     )
 
     parser.add_argument(
@@ -175,7 +177,7 @@ def main() -> int:
         metavar="JSON文件",
         nargs="?",
         const=DEFAULT_CONFIG_PATH,
-        help="保存默认配置到JSON文件\n示例: --save-config 或 --save-config custom.json"
+        help="保存默认配置（或当前配置）到JSON文件"
     )
 
     parser.add_argument(

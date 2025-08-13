@@ -1,20 +1,15 @@
 {
     "nuitka_args": [
+        "--module",
         "--remove-output",
         "--disable-plugin=tk-inter",
         "--enable-plugin=no-qt",
         "--product-name=PyMake",
-        "--file-version=$get",
-        "--show-progress",
-        "--show-memory",
-        "--show-modules",
+        "--file-version=1.1.5",
         "--lto=yes",
         "--mingw64",
-        "--output-dir=dist",
+        "--output-dir=.",
         "--jobs=$auto",
-        "--verbose",
-        "--show-scons",
-        "--module",
         "lang.py"
     ]
 }

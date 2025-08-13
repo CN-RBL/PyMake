@@ -1,6 +1,8 @@
 {
     "time": "%Y-%m-%d %H:%M:%S",
     "nuitka_output": "Nuitka 输出",
+    "options": "选项",
+
     "1": "成功加载配置文件：%s",
     "2": "配置文件不存在：%s",
     "3": "配置文件解析错误: %s - %s",
@@ -11,5 +13,16 @@
     "8": "请输入版本号（格式：X.X.X.X）",
     "9": "自动添加并行编译参数: --jobs=%d",
     "10": "开始执行Nuitka编译",
-    "11": "编译完整命令：%s"
+    "11": "编译完整命令：%s",
+    "12": "编译成功完成! 耗时: %.2f秒",
+    "13": "编译失败! 退出码: %d, 耗时: %.2f秒",
+    "14": "未找到Nuitka, 请通过以下命令安装: \n\tpip install nuitka",
+    "15": "编译过程中发生意外错误: %s",
+    "16": "若要了解更多信息，请查看README.md",
+
+    "--version-help": "显示工具版本",
+    "--load-config-value": "JSON文件",
+    "--load-config-help": "从JSON文件加载配置",
+    "--save-config-value": "JSON文件",
+    "--save-config-help": "保存默认配置（或当前配置）到JSON"
 }

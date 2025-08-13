@@ -24,7 +24,7 @@ def get_app_language_list() -> list[str]:
     languages: list[str] = []
     for _ in os.listdir(LANG_DIR):
         if _.endswith(".json") and \
-                re.match(r"^[a-z]{1,2}-[a-z]{1,2}.json$", _) == _:
+           re.match(r"^[a-z]{1,2}-[a-z]{1,2}.json$", _) == _:
             languages.append(_)
 
     return languages
@@ -56,8 +56,3 @@ def t(x: str) -> str:
     if _json is None:
         raise RuntimeError("Not Initialized 未初始化 沒有初始化 初期化されていません")
     return _json[x]
-
-
-if __name__ == "__main__":
-    raise RuntimeError("Try Running The Module File 尝试运行模块文件 嘗試運行模組檔 \
-モジュールファイルを実行してみてください")
