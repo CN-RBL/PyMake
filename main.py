@@ -1,14 +1,17 @@
 import argparse
 import logging
-import multiprocessing
 import platform
 import subprocess
 import sys
-import time
-from lang import *
+from functools import lru_cache
+from multiprocessing import cpu_count
 from pathlib import Path
+from time import perf_counter
+
+from lang import *
 
 init_i18n(get_language_json(get_system_language()))
+_ = t
 
 logging.basicConfig(
     level=logging.INFO,
@@ -38,17 +41,17 @@ def load_config(file_path: Path) -> dict:
         with open(file_path, "r", encoding="utf-8") as f:
             config_data: dict = json.load(f)
 
-        logger.info(t("1"), file_path)
+        logger.info(_("1"), file_path)
         return config_data
 
     except FileNotFoundError:
-        logger.error(t("2"), file_path)
+        logger.error(_("2"), file_path)
         sys.exit(1)
     except json.JSONDecodeError as e:
-        logger.error(t("3"), file_path, e)
+        logger.error(_("3"), file_path, e)
         sys.exit(1)
     except Exception as e:
-        logger.exception(t("4"), e)
+        logger.exception(_("4"), e)
         sys.exit(1)
 
 
@@ -57,10 +60,10 @@ def save_config(config: dict, file_path: Path):
         with open(file_path, "w", encoding="utf-8") as f:
             json.dump(config, f, indent=4, ensure_ascii=False)
 
-        logger.info("配置已保存到: %s", file_path)
+        logger.info(_("5"), file_path)
 
     except Exception as e:
-        logger.error("保存配置文件失败: %s", e)
+        logger.error(_("6"), e)
         sys.exit(1)
 
 
@@ -72,25 +75,24 @@ def validate_and_process_args(config: dict) -> list[str]:
     for arg in args:
 
         if arg == "--jobs=$auto":
-            cpu_count = multiprocessing.cpu_count()
-            run_cpu_count: int = cpu_count * 2
+            run_cpu_count: int = cpu_count() * 2
             processed_args.append(f"--jobs={run_cpu_count}")
             jobs_set = True
-            logger.info("自动设置并行编译工作数: %d", run_cpu_count)
+            logger.info(_("7"), run_cpu_count)
         elif arg.startswith("--jobs="):
             jobs_set = True
             processed_args.append(arg)
         else:
             if arg == "--file-version=$get":
-                version: str = input("请输入版本号（格式：X.X.X.X）：")
+                version: str = input(_("8"))
                 processed_args.append(f"--file-version={version}")
             else:
                 processed_args.append(arg)
 
     if not jobs_set:
-        run_cpu_count = multiprocessing.cpu_count()
+        run_cpu_count = cpu_count() * 2
         processed_args.append(f"--jobs={run_cpu_count}")
-        logger.info(f"自动添加并行编译参数: --jobs={run_cpu_count}")
+        logger.info(_("9"), run_cpu_count)
 
     return processed_args
 
@@ -102,11 +104,10 @@ def run_nuitka(config: dict) -> int | None:
 
         cmd = [sys.executable, "-m", "nuitka"] + nuitka_args
 
-        logger.info("开始执行Nuitka编译...")
-        logger.debug("完整命令: %s", " ".join(cmd))
+        logger.info(_("10"))
+        logger.debug(_("11"), " ".join(cmd))
 
-        start_time: float = time.perf_counter()
-        print(cmd)
+        start_time: float = perf_counter()
 
         with subprocess.Popen(
                 cmd,
@@ -119,27 +120,28 @@ def run_nuitka(config: dict) -> int | None:
         ) as proc:
             if proc.stdout:
                 for line in proc.stdout:
-                    print(f"[Nuitka输出] {line}", end="")
+                    print(f"[{_("nuitka_output")}] {line}", end="")
 
             return_code: int = proc.wait()
 
-        duration = time.perf_counter() - start_time
+        duration: float = perf_counter() - start_time
 
         if return_code == 0:
-            logger.info("编译成功完成! 耗时: %.3f秒", duration)
+            logger.info("编译成功完成! 耗时: %.2f秒", duration)
             return 0
         else:
             logger.error("编译失败! 退出码: %d, 耗时: %.2f秒", return_code, duration)
             sys.exit(1)
 
     except FileNotFoundError:
-        logger.error("未找到Nuitka, 请先安装: pip install nuitka")
+        logger.error("未找到Nuitka, 请先通过一下命令安装: \n\tpip install nuitka")
         sys.exit(1)
     except Exception as e:
         logger.exception("编译过程中发生意外错误: %s", e)
         sys.exit(1)
 
 
+@lru_cache(maxsize=5)
 def is_compiled() -> bool:
     try:
         if __compiled__ is not None:
@@ -206,7 +208,7 @@ def main() -> int:
     else:
         parser.print_help()
 
-    print("按下任意键以退出程序", end=" ")
+    print("按下任意键以退出程序", end="")
     os.system("pause>nul")
     return 0
 
