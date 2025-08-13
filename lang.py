@@ -31,7 +31,7 @@ def get_app_language_list() -> list[str]:
 
 
 def get_language_json(language: str) -> dict:
-    with open(f"{LANG_DIR}{language}.json") as file:
+    with open(f"{LANG_DIR}{language}.json", encoding="utf-8") as file:
         return json.load(file)
 
 
@@ -53,6 +53,8 @@ def init_i18n(language_json: dict) -> None:
 
 
 def t(x: str) -> str:
+    if _json is None:
+        raise RuntimeError("Not Initialized 未初始化 沒有初始化 初期化されていません")
     return _json[x]
 
 

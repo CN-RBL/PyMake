@@ -8,14 +8,16 @@ import time
 from lang import *
 from pathlib import Path
 
+init_i18n(get_language_json(get_system_language()))
+
 logging.basicConfig(
     level=logging.INFO,
     format="[%(asctime)s] [%(levelname)s] %(message)s (%(filename)s.%(funcName)s %(lineno)d)",
-    datefmt="%Y-%m-%d %H:%M:%S"
+    datefmt=t("time")
 )
 logger: logging.Logger = logging.getLogger("PyMake")
 
-VERSION: str = "1.1.5"
+VERSION: str = "1.1.3"
 AUTHOR: str = "RED.BLUE.LIGHT 红蓝灯"
 DEFAULT_CONFIG_PATH: Path = Path("config.json")
 
@@ -43,10 +45,10 @@ def load_config(file_path: Path) -> dict:
         logger.error(t("2"), file_path)
         sys.exit(1)
     except json.JSONDecodeError as e:
-        logger.error("配置文件解析错误: %s - %s", file_path, e)
+        logger.error(t("3"), file_path, e)
         sys.exit(1)
     except Exception as e:
-        logger.exception("加载配置文件时发生意外错误: %s", e)
+        logger.exception(t("4"), e)
         sys.exit(1)
 
 
@@ -186,11 +188,6 @@ def main() -> int:
         "--language",
         metavar="语言代码",
         help="设置工具语言"
-    )
-
-    parser.add_argument(
-        "目标文件"
-
     )
 
     args = parser.parse_args()
