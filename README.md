@@ -1,6 +1,7 @@
 # PyMake
 
 一个强大的的Python 编译工具，只需要一个 json 文件即可配置编译
+
 ![Python Version](https://img.shields.io/badge/Python-3.12.7-blue) ![Nuitka Version](https://img.shields.io/badge/Nuitka-2.7.12-green) ![License](https://img.shields.io/badge/LICENSE-MIT-red)
 
 ---
