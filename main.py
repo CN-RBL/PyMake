@@ -12,7 +12,8 @@ from time import perf_counter
 
 from lang import *
 
-init_i18n(get_language_json(get_system_language()))
+# init_i18n(get_language_json(get_system_language()))
+init_i18n(get_language_json("en-us"))
 _ = t
 
 logging.basicConfig(
@@ -120,7 +121,7 @@ def run_nuitka(config: dict) -> int | None:
         ) as proc:
             if proc.stdout:
                 for line in proc.stdout:
-                    print(f"[{_("nuitka_output")}] {line}", end="")
+                    print(f"[{_("nuitka-output")}] {line}", end="")
 
             return_code: int = proc.wait()
 
@@ -162,34 +163,34 @@ def main() -> int:
     parser.add_argument(
         "--version",
         action="version",
-        version=f"PyMake {VERSION}",
-        help="显示工具版本"
+        version=f"PyMake v{VERSION}",
+        help=_("--version-help")
     )
 
     parser.add_argument(
         "--load-config",
-        metavar="JSON文件",
+        metavar=_("json-file-value"),
         help=_("--load-config-help")
     )
 
     parser.add_argument(
         "--save-config",
-        metavar="JSON文件",
+        metavar=_("json-file-value"),
         nargs="?",
         const=DEFAULT_CONFIG_PATH,
-        help="保存默认配置（或当前配置）到JSON文件"
+        help=_("--save-config-help")
     )
 
     parser.add_argument(
         "--verbose",
         action="store_true",
-        help="启用详细输出模式"
+        help=_("--verbose-help")
     )
 
     parser.add_argument(
-        "--language",
-        metavar="语言代码",
-        help="设置工具语言"
+        "--set-language",
+        metavar=_("language-code-value"),
+        help=_("--set-language-help")
     )
 
     args: argparse.Namespace = parser.parse_args()
@@ -207,13 +208,12 @@ def main() -> int:
         run_nuitka(config)
     else:
         parser.print_help()
+        logger.info("test TEST 测试")
 
-    print("按下任意键以退出程序", end="")
-    os.system("pause>nul")
+    print(_("pause-exit"), end="")
+    os.system("pause >nul")
     return 0
 
 
 if __name__ == "__main__":
-    if not platform.system() == "Windows":
-        sys.exit()
     sys.exit(main())

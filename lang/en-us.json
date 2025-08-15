@@ -1,0 +1,32 @@
+{
+    "time": "%b %d, %Y %H:%M:%S",
+    "nuitka-output": "Nuitka Output",
+    "options": "Options",
+    "json-file-value": "JSON File",
+    "language-code-value": "Language Code",
+
+    "1": "Successfully loaded config file: %s",
+    "2": "Config file does not exist: %s",
+    "3": "Config file parsing error: %s - %s",
+    "4": "Unexpected error when loading the config file: %s",
+    "5": "The configuration information is saved to: %s",
+    "6": "Failed to save the config file: %s",
+    "7": "The number of parallel compilation jobs is automatically set: %d",
+    "8": "Please enter the version number (format: X.X.X.X up to 4 digits):",
+    "9": "Automatically add parallel compilation parameters: --jobs=%d",
+    "10": "开始执行Nuitka编译",
+    "11": "编译完整命令：%s",
+    "12": "编译成功完成! 耗时: %.2f秒",
+    "13": "编译失败! 退出码: %d, 耗时: %.2f秒",
+    "14": "未找到Nuitka, 请通过以下命令安装: \n\tpip install nuitka",
+    "15": "编译过程中发生意外错误: %s",
+    "16": "若要了解更多信息，请查看README.md",
+
+    "--version-help": "显示工具版本",
+    "--load-config-help": "从JSON文件加载配置",
+    "--save-config-help": "保存默认配置（或当前配置）到JSON",
+    "--verbose-help": "启用详细输出模式",
+    "--set-language-help": "设置工具语言",
+
+    "pause-exit": "Press any key to exit the program"
+}

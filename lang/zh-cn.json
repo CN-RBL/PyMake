@@ -1,7 +1,9 @@
 {
     "time": "%Y-%m-%d %H:%M:%S",
-    "nuitka_output": "Nuitka 输出",
+    "nuitka-output": "Nuitka 输出",
     "options": "选项",
+    "json-file-value": "JSON文件",
+    "language-code-value": "语言代码",
 
     "1": "成功加载配置文件：%s",
     "2": "配置文件不存在：%s",
@@ -10,7 +12,7 @@
     "5": "配置信息已保存到：%s",
     "6": "保存配置文件失败：%s",
     "7": "自动设置并行编译工作数：%d",
-    "8": "请输入版本号（格式：X.X.X.X）",
+    "8": "请输入版本号（格式：X.X.X.X 最高4位）：",
     "9": "自动添加并行编译参数: --jobs=%d",
     "10": "开始执行Nuitka编译",
     "11": "编译完整命令：%s",
@@ -21,8 +23,10 @@
     "16": "若要了解更多信息，请查看README.md",
 
     "--version-help": "显示工具版本",
-    "--load-config-value": "JSON文件",
     "--load-config-help": "从JSON文件加载配置",
-    "--save-config-value": "JSON文件",
-    "--save-config-help": "保存默认配置（或当前配置）到JSON"
+    "--save-config-help": "保存默认配置（或当前配置）到JSON",
+    "--verbose-help": "启用详细输出模式",
+    "--set-language-help": "设置工具语言",
+
+    "pause-exit": "按下任意键以退出程序"
 }
