@@ -11,9 +11,10 @@ from pathlib import Path
 from time import perf_counter
 
 from lang import *
+from test import get_system_language
 
-# init_i18n(get_language_json(get_system_language()))
-init_i18n(get_language_json("en-us"))
+init_i18n(get_language_json(get_system_language()))
+# init_i18n(get_language_json("en-us"))
 _ = t
 
 logging.basicConfig(
@@ -194,6 +195,9 @@ def main() -> int:
     )
 
     args: argparse.Namespace = parser.parse_args()
+
+    if args.set_language:
+        init_i18n(get_language_json(args.set_language))
 
     if args.verbose:
         logger.setLevel(logging.DEBUG)
