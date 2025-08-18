@@ -1,15 +1,17 @@
 {
     "nuitka_args": [
-        "--module",
+        "--onefile",
         "--remove-output",
         "--disable-plugin=tk-inter",
         "--enable-plugin=no-qt",
+        "--enable-plugin=upx",
         "--product-name=PyMake",
         "--file-version=1.1.5",
+        "--nofollow-import-to=tkinter",
         "--lto=yes",
         "--mingw64",
-        "--output-dir=.",
-        "--jobs=$auto",
-        "lang.py"
+        "--output-dir=.release",
+        "--jobs=64",
+        "main.py"
     ]
 }
