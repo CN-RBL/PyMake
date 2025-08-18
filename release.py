@@ -20,7 +20,7 @@ shutil.copytree("lang", ".release\\lang\\")
 with py7zr.SevenZipFile("pymake.7z", "w", password="pymake") as release_7z:
     release_7z.writeall(".release/")
 
-with zipfile.ZipFile("pymake.zip", "r") as release_zip:
+with zipfile.ZipFile("pymake.zip", "w") as release_zip:
     release_zip.extractall(".release/")
 
 shutil.rmtree(".release")

@@ -5,4 +5,6 @@ nuitka-crash-report.xml
 log.txt
 dist
 .release
+*.7z
+*.zip
 __pycache__
