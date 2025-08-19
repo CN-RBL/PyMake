@@ -1,6 +1,12 @@
 # Python Version: 3.12.7
 -i https://pypi.tuna.tsinghua.edu.cn/simple/
 
-nuitka>=2.7.12
-ordered-set>=4.1.0
-zstandard>=0.23.0
+# in main.py (pymake.exe)
+
+nuitka >= 2.7.12
+ordered-set >= 4.1.0
+zstandard >= 0.24.0
+
+# in release.py
+
+py7zr >= 1.0.0
