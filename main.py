@@ -1,6 +1,5 @@
 import argparse
 import logging
-import platform
 import subprocess
 import os
 import sys
@@ -11,10 +10,8 @@ from pathlib import Path
 from time import perf_counter
 
 from lang import *
-from test import get_system_language
 
-init_i18n(get_language_json(get_system_language()))
-# init_i18n(get_language_json("en-us"))
+init_i18n(get_language_json("en-us"))
 _ = t
 
 logging.basicConfig(
@@ -122,7 +119,7 @@ def run_nuitka(config: dict) -> int | None:
         ) as proc:
             if proc.stdout:
                 for line in proc.stdout:
-                    print(f"[{_("nuitka-output")}] {line}", end="")
+                    print(f"[{_('nuitka-output')}] {line}", end="")
 
             return_code: int = proc.wait()
 
@@ -133,7 +130,7 @@ def run_nuitka(config: dict) -> int | None:
             return 0
         else:
             logger.error(_("13"), return_code, duration)
-            sys.exit(1)
+            return 1
 
     except FileNotFoundError:
         logger.error(_("14"))
@@ -153,10 +150,31 @@ def is_compiled() -> bool:
 
 
 def main() -> int:
+    pre_parser = argparse.ArgumentParser(add_help=False)
+    pre_parser.add_argument("--set-language", metavar="language-code-value")
+    pre_args = pre_parser.parse_args()
+
+    if pre_args.set_language:
+        init_i18n(get_language_json(pre_args.set_language))
+    else:
+        init_i18n(get_language_json(get_system_language()))
+
+    global _
+    _ = t
+
+    logging.basicConfig(
+        level=logging.INFO,
+        format="[%(asctime)s] [%(levelname)s] %(message)s (%(filename)s.%(funcName)s %(lineno)d)",
+        datefmt=_("time"),
+        force=True
+    )
+    logger.setLevel(logging.INFO)
+
+    # 创建主解析器
     parser: argparse.ArgumentParser = argparse.ArgumentParser(
         prog="PyMake",
         description=f"PyMake v{VERSION} by {AUTHOR}{'' if is_compiled() else ' (DEBUG)'}",
-        usage=f"pymake.exe [{_("options")}]" if is_compiled() else f"pymake.py [{_("options")}]",
+        usage=f"pymake.exe [{_('options')}]" if is_compiled() else f"pymake.py [{_('options')}]",
         formatter_class=argparse.RawTextHelpFormatter,
         epilog=_("16")
     )
@@ -195,9 +213,6 @@ def main() -> int:
     )
 
     args: argparse.Namespace = parser.parse_args()
-
-    if args.set_language:
-        init_i18n(get_language_json(args.set_language))
 
     if args.verbose:
         logger.setLevel(logging.DEBUG)

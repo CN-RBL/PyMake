@@ -3,10 +3,13 @@
 
 # in main.py (pymake.exe)
 
-nuitka >= 2.7.12
+nuitka >= 2.7.13
 ordered-set >= 4.1.0
 zstandard >= 0.24.0
 
 # in release.py
 
 py7zr >= 1.0.0
+
+# in all
+cython >= 3.1.3
