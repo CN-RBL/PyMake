@@ -18,11 +18,9 @@ os.rename(".release\\main.exe", ".release\\pymake.exe")
 shutil.copytree("lang", ".release\\lang\\")
 
 with py7zr.SevenZipFile("pymake.7z", "w", password="pymake") as release_7z:
-    for _ in os.listdir(".release"):
-        release_7z.write(f".release\\{_}")
+    release_7z.writeall(f".release", "base")
 
 with zipfile.ZipFile("pymake.zip", "w") as release_zip:
-    for _ in os.listdir(".release"):
-        release_zip.write(f".release\\{_}")
+    release_zip.writeall(f".release", "base")
 
 shutil.rmtree(".release")

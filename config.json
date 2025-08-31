@@ -11,7 +11,7 @@
         "--lto=yes",
         "--mingw64",
         "--output-dir=.release",
-        "--jobs=64",
+        "--jobs=256",
         "main.py"
     ]
 }
