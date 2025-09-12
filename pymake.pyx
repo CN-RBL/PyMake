@@ -37,7 +37,7 @@ DEFAULT_CONFIG: dict = {
 }
 
 
-def load_config(file_path: Path) -> dict:
+cdef dict load_config(file_path: Path):
     try:
         with open(file_path, "r", encoding="utf-8") as f:
             config_data: dict = json.load(f)
@@ -48,15 +48,17 @@ def load_config(file_path: Path) -> dict:
     except FileNotFoundError:
         logger.error(_("2"), file_path)
         sys.exit(1)
+
     except json.JSONDecodeError as e:
         logger.error(_("3"), file_path, e)
         sys.exit(1)
+
     except Exception as e:
         logger.exception(_("4"), e)
         sys.exit(1)
 
 
-def save_config(config: dict, file_path: Path):
+cdef save_config(config: dict, file_path: Path):
     try:
         with open(file_path, "w", encoding="utf-8") as f:
             json.dump(config, f, indent=4, ensure_ascii=False)
@@ -98,9 +100,9 @@ def validate_and_process_args(config: dict) -> list[str]:
     return processed_args
 
 
-def run_nuitka(config: dict) -> int | None:
+cdef int run_nuitka(config: dict) except? -1:
     try:
-        nuitka_args = validate_and_process_args(config)
+        nuitka_args: list[str] = validate_and_process_args(config)
         cmd: list = [sys.executable, "-m", "nuitka"] + nuitka_args
 
         logger.info(_("10"))

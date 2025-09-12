@@ -2,5 +2,9 @@ from setuptools import setup
 from Cython.Build import cythonize
 
 setup(
-    ext_modules=cythonize("*.pyx", nthreads=256, annotate=True),
+    #                                       INT_MAX
+    ext_modules=cythonize("*.pyx", nthreads=2147483647, annotate=True, compiler_directives={
+        "language_level": 3
+    }
+    )
 )

@@ -7,4 +7,6 @@ dist
 .release
 *.7z
 *.zip
+build
+pymake.html
 __pycache__
