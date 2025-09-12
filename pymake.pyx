@@ -12,7 +12,7 @@ from time import perf_counter
 from lang import *
 
 init_i18n(get_language_json("en-us"))
-_ = t
+cdef dict _ = t
 
 logging.basicConfig(
     level=logging.INFO,
@@ -108,7 +108,7 @@ cdef int run_nuitka(config: dict) except? -1:
         logger.info(_("10"))
         logger.debug(_("11"), " ".join(cmd))
 
-        start_time: float = perf_counter()
+        cdef double start_time = perf_counter()
 
         with subprocess.Popen(
                 cmd,
@@ -120,12 +120,13 @@ cdef int run_nuitka(config: dict) except? -1:
                 bufsize=1
         ) as proc:
             if proc.stdout:
+                cdef str line
                 for line in proc.stdout:
                     print(f"[{_('nuitka-output')}] {line}", end="")
 
-            return_code: int = proc.wait()
+            cdef int return_code = proc.wait()
 
-        duration: float = perf_counter() - start_time
+        cdef double duration = perf_counter() - start_time
 
         if return_code == 0:
             logger.info(_("12"), duration)
@@ -143,7 +144,7 @@ cdef int run_nuitka(config: dict) except? -1:
 
 
 @lru_cache(maxsize=5)
-def is_compiled() -> bool:
+cdef bool is_compiled():
     try:
         if __compiled__ is not None:
             return True
@@ -151,10 +152,10 @@ def is_compiled() -> bool:
         return False
 
 
-def main() -> int:
-    pre_parser = argparse.ArgumentParser(add_help=False)
+cpdef int main():
+    cdef pre_parser argparse.ArgumentParser = argparse.ArgumentParser(add_help=False)
     pre_parser.add_argument("--set-language", metavar="language-code-value")
-    pre_args = pre_parser.parse_args()
+    cdef pre_args argparse.Namespace = pre_parser.parse_args()
 
     if pre_args.set_language:
         init_i18n(get_language_json(pre_args.set_language))

@@ -6,11 +6,11 @@ import json
 import shutil
 import winreg
 
-LANG_DIR: str = "./lang/"
-_json: dict = {}
+cdef str LANG_DIR = "./lang/"
+cdef dict _json = {}
 
 
-def get_system_language() -> str:
+cpdef str get_system_language():
     try:
         with winreg.OpenKey(winreg.HKEY_CURRENT_USER,
                             r"Control Panel\International") as key:
