@@ -11,20 +11,20 @@ from time import perf_counter
 from lang import *
 
 init_i18n(get_language_json("en-us"))
-cdef dict _ = t
+_ = t
 
 logging.basicConfig(
     level=logging.INFO,
     format="[%(asctime)s] [%(levelname)s] %(message)s (%(filename)s.%(funcName)s %(lineno)d)",
     datefmt=_("time")
 )
-logger: logging.Logger = logging.getLogger("PyMake")
+logger = logging.getLogger("PyMake")
 
-cdef str VERSION = "1.1.5"
-cdef str AUTHOR = "RED.BLUE.LIGHT 红蓝灯"
-cdef Path DEFAULT_CONFIG_PATH = Path("config.json")
+VERSION = "1.1.5"
+AUTHOR = "RED.BLUE.LIGHT 红蓝灯"
+DEFAULT_CONFIG_PATH = Path("config.json")
 
-cdef dict DEFAULT_CONFIG = {
+DEFAULT_CONFIG = {
     "nuitka_args": [
         "--standalone",
         "--remove-output",
@@ -36,8 +36,7 @@ cdef dict DEFAULT_CONFIG = {
 }
 
 
-cdef dict load_config(Path file_path):
-    cdef dict config_data
+def load_config(file_path):
     try:
         with open(file_path, "r", encoding="utf-8") as f:
             config_data = json.load(f)
@@ -58,7 +57,7 @@ cdef dict load_config(Path file_path):
         sys.exit(1)
 
 
-cdef save_config(dict config, Path file_path):
+def save_config(config, file_path):
     try:
         with open(file_path, "w", encoding="utf-8") as f:
             json.dump(config, f, indent=4, ensure_ascii=False)
@@ -70,15 +69,15 @@ cdef save_config(dict config, Path file_path):
         sys.exit(1)
 
 
-def validate_and_process_args(config: dict) -> list[str]:
-    args: list = config.get("nuitka_args", [])
-    processed_args: list = []
-    jobs_set: bool = False
+def validate_and_process_args(config):
+    args = config.get("nuitka_args", [])
+    processed_args = []
+    jobs_set = False
 
     for arg in args:
 
         if arg == "--jobs=$auto":
-            run_cpu_count: int = cpu_count() << 1
+            run_cpu_count = cpu_count() << 1
             processed_args.append(f"--jobs={run_cpu_count}")
             jobs_set = True
             logger.info(_("7"), run_cpu_count)
@@ -87,27 +86,23 @@ def validate_and_process_args(config: dict) -> list[str]:
             processed_args.append(arg)
         else:
             if arg == "--file-version=$get":
-                version: str = input(_("8"))
+                version = input(_("8"))
                 processed_args.append(f"--file-version={version}")
             else:
                 processed_args.append(arg)
 
     if not jobs_set:
-        run_cpu_count: int = cpu_count() << 1
+        run_cpu_count = cpu_count() << 1
         processed_args.append(f"--jobs={run_cpu_count}")
         logger.info(_("9"), run_cpu_count)
 
     return processed_args
 
 
-cdef int run_nuitka(config: dict) except? -1:
-    cdef double start_time
-    cdef str line
-    cdef int return_code
-    cdef double duration
+def run_nuitka(config):
     try:
-        nuitka_args: list[str] = validate_and_process_args(config)
-        cmd: list = [sys.executable, "-m", "nuitka"] + nuitka_args
+        nuitka_args = validate_and_process_args(config)
+        cmd = [sys.executable, "-m", "nuitka"] + nuitka_args
 
         logger.info(_("10"))
         logger.debug(_("11"), " ".join(cmd))
@@ -128,7 +123,6 @@ cdef int run_nuitka(config: dict) except? -1:
                     print(f"[{_('nuitka-output')}] {line}", end="")
 
         return_code = proc.wait()
-
         duration = perf_counter() - start_time
 
         if return_code == 0:
@@ -146,7 +140,7 @@ cdef int run_nuitka(config: dict) except? -1:
         sys.exit(1)
 
 
-cdef bool is_compiled():
+def is_compiled():
     try:
         if __compiled__ is not None:
             return True
@@ -154,10 +148,10 @@ cdef bool is_compiled():
         return False
 
 
-cpdef int main():
-    pre_parser: argparse.ArgumentParser = argparse.ArgumentParser(add_help=False)
+def main():
+    pre_parser = argparse.ArgumentParser(add_help=False)
     pre_parser.add_argument("--set-language", metavar="language-code-value")
-    pre_args: argparse.Namespace = pre_parser.parse_args()
+    pre_args = pre_parser.parse_args()
 
     if pre_args.set_language:
         init_i18n(get_language_json(pre_args.set_language))
@@ -175,7 +169,7 @@ cpdef int main():
     )
     logger.setLevel(logging.INFO)
 
-    parser: argparse.ArgumentParser = argparse.ArgumentParser(
+    parser = argparse.ArgumentParser(
         prog="PyMake",
         description=f"PyMake v{VERSION} by {AUTHOR}{'' if is_compiled() else ' (DEBUG)'}",
         usage=f"pymake.exe [{_('options')}]" if is_compiled() else f"pymake.py [{_('options')}]",
@@ -216,7 +210,7 @@ cpdef int main():
         help=_("--set-language-help")
     )
 
-    args: argparse.Namespace = parser.parse_args()
+    args = parser.parse_args()
 
     if args.verbose:
         logger.setLevel(logging.DEBUG)
@@ -236,3 +230,7 @@ cpdef int main():
     print(_("pause-exit"), end="")
     os.system("pause >nul")
     return 0
+
+
+if __name__ == "__main__":
+    main()
