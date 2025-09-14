@@ -99,6 +99,11 @@ def validate_and_process_args(config):
     return processed_args
 
 
+class VMBuild:
+    def __init__(self):
+        pass
+
+
 def run_nuitka(config):
     try:
         nuitka_args = validate_and_process_args(config)
